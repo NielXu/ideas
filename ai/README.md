@@ -1,6 +1,12 @@
 # AI
 Some algorithms related to artificial intelligence. Most of them are from [CSCD84](https://utsc.calendar.utoronto.ca/course/cscd84h3), which is very interesting to study if you are interested in AI.
 
+Don't forget to install the required packages if you want to run the scripts in this folder.
+
+```
+$ pip install -r requirements.txt
+```
+
 
 ## bayes_net.py
 __From Wikipedia:__
@@ -40,14 +46,6 @@ nn.train(X_train, y_train, 20, 0.01)        # Train the network for 20 epochs, 0
 nn.predict(X_test)
 ```
 
-#### Setup
-
-Install the required packages, keras and tensorflow to gather the MNIST dataset only (Because I am too lazy to write my own script to gather it):
-
-```
-$ pip install -r requirements.txt
-```
-
 #### MNIST
 
 It also demostrates the training and testing process of the very famous dataset MNIST. However, the network will train very slowly with a large dataset without any optimization, therefore, I only recommend you to test a portion of it. By modifying: 
@@ -82,4 +80,63 @@ After 19 epoch, average loss: 0.0798283323847187
 After 20 epoch, average loss: 0.07613208801989829
 
 With test_size=100 , the correct rate is: 0.7
+```
+
+
+## cnn_keras.py
+This is an example from the [keras website](https://keras.io/examples/vision/mnist_convnet/). It uses the convolutional neural network (CNN) to train a model for recognzing the hand-written digits (MNIST dataset) with accuracy ~99%. The model definition is the following:
+```python
+model = keras.Sequential(
+    [
+        keras.Input(shape=input_shape),
+        layers.Conv2D(32, kernel_size=(3, 3), activation="relu"),
+        layers.MaxPooling2D(pool_size=(2, 2)),
+        layers.Conv2D(64, kernel_size=(3, 3), activation="relu"),
+        layers.MaxPooling2D(pool_size=(2, 2)),
+        layers.Flatten(),
+        layers.Dropout(0.5),
+        layers.Dense(num_classes, activation="softmax"),
+    ]
+)
+```
+The idea of CNN is to group a few pixels as a box (`kernel_size`) and train their weights accordingly. We can do it because we usually only need to observe a small area of the graph to extract the features, instead of looking it pixels by pixels. It also uses a concept call pooling, which will reduce the number of calculations we need by selecting the maximum value (`MaxPooling`) in a small area (`pool_size`). Check out [this acticle](https://towardsdatascience.com/a-comprehensive-guide-to-convolutional-neural-networks-the-eli5-way-3bd2b1164a53) for more information.
+
+#### Train result
+```
+Epoch 1/15
+422/422 [==============================] - 15s 34ms/step - loss: 0.7476 - accuracy: 0.7718 - val_loss: 0.0803 - val_accuracy: 0.9762
+Epoch 2/15
+422/422 [==============================] - 14s 32ms/step - loss: 0.1208 - accuracy: 0.9627 - val_loss: 0.0596 - val_accuracy: 0.9837
+Epoch 3/15
+422/422 [==============================] - 15s 36ms/step - loss: 0.0864 - accuracy: 0.9743 - val_loss: 0.0449 - val_accuracy: 0.9872
+Epoch 4/15
+422/422 [==============================] - 15s 35ms/step - loss: 0.0680 - accuracy: 0.9787 - val_loss: 0.0414 - val_accuracy: 0.9882
+Epoch 5/15
+422/422 [==============================] - 13s 32ms/step - loss: 0.0624 - accuracy: 0.9808 - val_loss: 0.0385 - val_accuracy: 0.9878
+Epoch 6/15
+422/422 [==============================] - 13s 31ms/step - loss: 0.0554 - accuracy: 0.9838 - val_loss: 0.0352 - val_accuracy: 0.9910
+Epoch 7/15
+422/422 [==============================] - 14s 32ms/step - loss: 0.0513 - accuracy: 0.9833 - val_loss: 0.0309 - val_accuracy: 0.9923
+Epoch 8/15
+422/422 [==============================] - 14s 33ms/step - loss: 0.0473 - accuracy: 0.9858 - val_loss: 0.0319 - val_accuracy: 0.9907
+Epoch 9/15
+422/422 [==============================] - 14s 34ms/step - loss: 0.0461 - accuracy: 0.9864 - val_loss: 0.0323 - val_accuracy: 0.9913
+Epoch 10/15
+422/422 [==============================] - 14s 33ms/step - loss: 0.0403 - accuracy: 0.9859 - val_loss: 0.0289 - val_accuracy: 0.9913
+Epoch 11/15
+422/422 [==============================] - 14s 34ms/step - loss: 0.0375 - accuracy: 0.9882 - val_loss: 0.0289 - val_accuracy: 0.9908
+Epoch 12/15
+422/422 [==============================] - 14s 33ms/step - loss: 0.0329 - accuracy: 0.9892 - val_loss: 0.0276 - val_accuracy: 0.9917
+Epoch 13/15
+422/422 [==============================] - 14s 32ms/step - loss: 0.0324 - accuracy: 0.9888 - val_loss: 0.0285 - val_accuracy: 0.9920
+Epoch 14/15
+422/422 [==============================] - 13s 32ms/step - loss: 0.0363 - accuracy: 0.9879 - val_loss: 0.0279 - val_accuracy: 0.9915
+Epoch 15/15
+422/422 [==============================] - 13s 31ms/step - loss: 0.0290 - accuracy: 0.9904 - val_loss: 0.0279 - val_accuracy: 0.9915
+```
+
+#### Test result
+```
+Test loss: 0.024496978148818016
+Test accuracy: 0.9921000003814697
 ```
